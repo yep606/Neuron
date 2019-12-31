@@ -6,25 +6,33 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
 
-        int increenent = 0;
 
         Main main = new Main();
         Network net = new Network(15,10);
         double[] inputs;
-        double[] inputBias = {-1,6,1,0,2,0,-1,3,-2,-1};
-
+        double[] inputBias = {-1, 6, 1, 0, 2, 0, -1, 3, -2, -1};
+        double[][] weights =
+        weights = new double[][]{{1, 1, 1, 1, -1, 1, 1, -1, 1, 1, -1, 1, 1, 1, 1}, //0
+                {-1, 1, -1, -1, 1, -1, -1, 1, -1, -1, 1, -1, -1, 1, -1}, //1
+                {1, 1, 1, -1, -1, 1, 1, 1, 1, 1, -1, -1, 1, 1, 1}, //2
+                {1, 1, 1, -1, -1, 1, 1, 1, 1, -1, -1, 1, 1, 1, 1}, //3
+                {1, -1, 1, 1, -1, 1, 1, 1, 1, -1, -1, 1, -1, -1, 1}, //4
+                {1, 1, 1, 1, -1, -1, 1, 1, 1, -1, -1, 1, 1, 1, 1}, //5
+                {1, 1, 1, 1, -1, -1, 1, 1, 1, 1, -1, 1, 1, 1, 1}, //6
+                {1, 1, 1, -1, -1, 1, -1, -1, 1, -1, -1, 1, -1, -1, 1}, //7
+                {1, 1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, 1, 1}, //8
+                {1, 1, 1, 1, -1, 1, 1, 1, 1, -1, -1, 1, 1, 1, 1}}; //9
         System.out.println("Input grid: ");
 
         inputs = main.takeInput();
-        System.out.println("-------------");
         //okay
         for (int layer = 1; layer < net.NETWORK_SIZE; layer++) {
             for (int neuron = 0; neuron < net.NETWORK_LAYERS_SIZES[layer]; neuron++) {
+
                 for (int prevNeuron = 0; prevNeuron < net.NETWORK_LAYERS_SIZES[layer - 1]; prevNeuron++) {
-                    if (inputs[prevNeuron] == 0)
-                        net.weights[layer][neuron][prevNeuron] = -1;
-                    else
-                        net.weights[layer][neuron][prevNeuron] = 1;
+
+                    net.weights[layer][neuron][prevNeuron] = weights[neuron][prevNeuron];
+
                 }
                 }
             }
@@ -32,19 +40,20 @@ public class Main {
         for (int layer = 1; layer < net.NETWORK_SIZE; layer++) {
             for (int neuron = 0; neuron < net.NETWORK_LAYERS_SIZES[layer]; neuron++) {
                 net.bias[layer][neuron] = inputBias[neuron];
-
             }
         }
 
-        System.out.println("This numbers is: " + Arrays.toString(net.calculate(inputs)));
+        int maxIndex = 0;
+        double maxElem = net.calculate(inputs)[0];
+        for (int i = 1; i <net.calculate(inputs).length; i++) {
+            if(net.calculate(inputs)[i] > maxElem){
+                maxElem = net.calculate(inputs)[i];
+                maxIndex = i;
+            }
+        }
 
-//        System.out.println("yep");
-//        for (int i = 1; i < 2; i++) {
-//            for (int j = 1; j < 2 ; j++) {
-//                for (int m = 0; m < 15; m ++)
-//                    System.out.println(net.weights[i][j][m]);
-//            }
-//        }
+        System.out.println("This numbers is: " + maxIndex);
+       // System.out.println(Arrays.toString(net.calculate(inputs)));
 
         }
 
@@ -58,11 +67,11 @@ public class Main {
 
         }
 
-        for (int i = 0; i <result.length(); i++) {
+        for (int i = 0; i < result.length(); i++) {
 
             if(result.charAt(i) == 'X')
                 inputs[i] = 1;
-            else
+            else if(result.charAt(i) == '_')
                 inputs[i] = 0;
         }
 

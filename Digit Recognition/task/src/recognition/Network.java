@@ -5,7 +5,7 @@ import java.util.Arrays;
 public class Network {
 
     double[][] outputs;
-    int[][][] weights;
+    double[][][] weights;
     double[][] bias;
 
 
@@ -24,7 +24,7 @@ public class Network {
 
         this.outputs = new double[NETWORK_SIZE][];
         //layer : neuron : prev neuron
-        this.weights = new int[NETWORK_SIZE][][];
+        this.weights = new double[NETWORK_SIZE][][];
         this.bias = new double[NETWORK_SIZE][];
 
         for(int i = 0; i < NETWORK_SIZE; i++){
@@ -33,7 +33,7 @@ public class Network {
             this.bias[i] = new double[NETWORK_LAYERS_SIZES[i]];
 
             if(i > 0)
-                this.weights[i] = new int[NETWORK_LAYERS_SIZES[i]][NETWORK_LAYERS_SIZES[i - 1]];
+                this.weights[i] = new double[NETWORK_LAYERS_SIZES[i]][NETWORK_LAYERS_SIZES[i - 1]];
         }
 
     }
@@ -56,9 +56,7 @@ public class Network {
 
                 outputs[layer][neuron] = sum;
 
-
             }
-
 
         }
 
@@ -66,11 +64,11 @@ public class Network {
 
     }
 
-//    private double sigmoid(double x){
-//
-//        return 1d / (1 + Math.exp(-x));
-//
-//    }
+    private double sigmoid(double x){
+
+        return 1d / (1 + Math.exp(-x));
+
+    }
 
 
 
