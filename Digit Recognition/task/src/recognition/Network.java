@@ -1,17 +1,19 @@
 package recognition;
 
+import java.util.Arrays;
+
 public class Network {
 
     double[][] outputs;
-    double[][][] weights;
+    int[][][] weights;
     double[][] bias;
 
 
 
-    private final int[] NETWORK_LAYERS_SIZES;
+    public final int[] NETWORK_LAYERS_SIZES;
     private final int INPUT_SIZE;
     private final int OUTPUT_SIZE;
-    private final int NETWORK_SIZE;
+    public final int NETWORK_SIZE;
 
     public Network(int... NETWORK_LAYERS_SIZES) {
 
@@ -21,8 +23,8 @@ public class Network {
         this.OUTPUT_SIZE = NETWORK_LAYERS_SIZES[NETWORK_SIZE - 1];
 
         this.outputs = new double[NETWORK_SIZE][];
-        //layer : neuron : weight neuron
-        this.weights = new double[NETWORK_SIZE][][];
+        //layer : neuron : prev neuron
+        this.weights = new int[NETWORK_SIZE][][];
         this.bias = new double[NETWORK_SIZE][];
 
         for(int i = 0; i < NETWORK_SIZE; i++){
@@ -31,7 +33,7 @@ public class Network {
             this.bias[i] = new double[NETWORK_LAYERS_SIZES[i]];
 
             if(i > 0)
-                this.weights[i] = new double[NETWORK_LAYERS_SIZES[i]][NETWORK_LAYERS_SIZES[i - 1]];
+                this.weights[i] = new int[NETWORK_LAYERS_SIZES[i]][NETWORK_LAYERS_SIZES[i - 1]];
         }
 
     }
@@ -42,13 +44,34 @@ public class Network {
 
         this.outputs[0] = input;
 
-        return new double[2];
+        for(int layer = 1; layer < NETWORK_SIZE; layer++){
+            for(int neuron = 0; neuron < NETWORK_LAYERS_SIZES[layer]; neuron++){
+
+                double sum = bias[layer][neuron];
+                for (int prevNeuron = 0; prevNeuron < NETWORK_LAYERS_SIZES[layer - 1] ; prevNeuron++) {
+
+                    sum += outputs[layer - 1][prevNeuron] * weights[layer][neuron][prevNeuron];
+
+                }
+
+                outputs[layer][neuron] = sum;
+
+
+            }
+
+
+        }
+
+        return outputs[NETWORK_SIZE - 1];
 
     }
 
-    public static void main(String[] args) {
+//    private double sigmoid(double x){
+//
+//        return 1d / (1 + Math.exp(-x));
+//
+//    }
 
-    }
 
 
 }
