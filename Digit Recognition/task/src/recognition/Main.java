@@ -5,14 +5,12 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-
-
+        NetworkTools tools = new NetworkTools();
         Main main = new Main();
         Network net = new Network(15,10);
         double[] inputs;
         double[] inputBias = {-1, 6, 1, 0, 2, 0, -1, 3, -2, -1};
-        double[][] weights =
-        weights = new double[][]{{1, 1, 1, 1, -1, 1, 1, -1, 1, 1, -1, 1, 1, 1, 1}, //0
+        double[][] weights = new double[][]{{1, 1, 1, 1, -1, 1, 1, -1, 1, 1, -1, 1, 1, 1, 1}, //0
                 {-1, 1, -1, -1, 1, -1, -1, 1, -1, -1, 1, -1, -1, 1, -1}, //1
                 {1, 1, 1, -1, -1, 1, 1, 1, 1, 1, -1, -1, 1, 1, 1}, //2
                 {1, 1, 1, -1, -1, 1, 1, 1, 1, -1, -1, 1, 1, 1, 1}, //3
@@ -24,6 +22,7 @@ public class Main {
                 {1, 1, 1, 1, -1, 1, 1, 1, 1, -1, -1, 1, 1, 1, 1}}; //9
         System.out.println("Input grid: ");
 
+        weights = tools.gaussWeights();
         inputs = main.takeInput();
         //okay
         for (int layer = 1; layer < net.NETWORK_SIZE; layer++) {
