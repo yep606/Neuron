@@ -47,7 +47,7 @@ public class Network {
         for(int layer = 1; layer < NETWORK_SIZE; layer++){
             for(int neuron = 0; neuron < NETWORK_LAYERS_SIZES[layer]; neuron++){
 
-                double sum = bias[layer][neuron];
+                double sum = 0; //bias[layer][neuron];
                 for (int prevNeuron = 0; prevNeuron < NETWORK_LAYERS_SIZES[layer - 1] ; prevNeuron++) {
 
                     sum += outputs[layer - 1][prevNeuron] * weights[layer][neuron][prevNeuron];
