@@ -54,7 +54,7 @@ public class Network {
 
                 }
 
-                outputs[layer][neuron] = sum;
+                outputs[layer][neuron] = sigmoid(sum);
 
             }
 

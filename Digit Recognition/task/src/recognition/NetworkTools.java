@@ -18,4 +18,11 @@ public class NetworkTools {
         return gaussNums;
     }
 
+    public void deltaCalculation(){
+
+        // n * prevNeuron * (neuron(ideal) - neuron(current))
+
+
+    }
+
 }

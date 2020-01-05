@@ -10,7 +10,8 @@ public class Main {
         Network net = new Network(15,10);
         double[] inputs;
         double[] inputBias = {-1, 6, 1, 0, 2, 0, -1, 3, -2, -1};
-        double[][] weights = new double[][]{{1, 1, 1, 1, -1, 1, 1, -1, 1, 1, -1, 1, 1, 1, 1}, //0
+        double[][] weights = tools.gaussWeights();
+        int[][] idealValues = new int[][]{{1, 1, 1, 1, -1, 1, 1, -1, 1, 1, -1, 1, 1, 1, 1}, //0
                 {-1, 1, -1, -1, 1, -1, -1, 1, -1, -1, 1, -1, -1, 1, -1}, //1
                 {1, 1, 1, -1, -1, 1, 1, 1, 1, 1, -1, -1, 1, 1, 1}, //2
                 {1, 1, 1, -1, -1, 1, 1, 1, 1, -1, -1, 1, 1, 1, 1}, //3
@@ -20,11 +21,11 @@ public class Main {
                 {1, 1, 1, -1, -1, 1, -1, -1, 1, -1, -1, 1, -1, -1, 1}, //7
                 {1, 1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, 1, 1}, //8
                 {1, 1, 1, 1, -1, 1, 1, 1, 1, -1, -1, 1, 1, 1, 1}}; //9
+
         System.out.println("Input grid: ");
 
-        weights = tools.gaussWeights();
         inputs = main.takeInput();
-        //okay
+
         for (int layer = 1; layer < net.NETWORK_SIZE; layer++) {
             for (int neuron = 0; neuron < net.NETWORK_LAYERS_SIZES[layer]; neuron++) {
 
