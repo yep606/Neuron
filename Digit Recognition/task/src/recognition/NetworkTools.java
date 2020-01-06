@@ -8,16 +8,16 @@ public class NetworkTools {
     double[] mean;
     Random random = new Random();
 
-    public double[][] idealValues = new double[][]{{1, 1, 1, 1, -1, 1, 1, -1, 1, 1, -1, 1, 1, 1, 1}, //0
-            {-1, 1, -1, -1, 1, -1, -1, 1, -1, -1, 1, -1, -1, 1, -1}, //1
-            {1, 1, 1, -1, -1, 1, 1, 1, 1, 1, -1, -1, 1, 1, 1}, //2
-            {1, 1, 1, -1, -1, 1, 1, 1, 1, -1, -1, 1, 1, 1, 1}, //3
-            {1, -1, 1, 1, -1, 1, 1, 1, 1, -1, -1, 1, -1, -1, 1}, //4
-            {1, 1, 1, 1, -1, -1, 1, 1, 1, -1, -1, 1, 1, 1, 1}, //5
-            {1, 1, 1, 1, -1, -1, 1, 1, 1, 1, -1, 1, 1, 1, 1}, //6
-            {1, 1, 1, -1, -1, 1, -1, -1, 1, -1, -1, 1, -1, -1, 1}, //7
-            {1, 1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, 1, 1}, //8
-            {1, 1, 1, 1, -1, 1, 1, 1, 1, -1, -1, 1, 1, 1, 1}}; //9
+    public double[][] idealValues = new double[][]{{1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1}, //0
+            {0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0}, //1
+            {1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1}, //2
+            {1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1}, //3
+            {1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1}, //4
+            {1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1}, //5
+            {1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1}, //6
+            {1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1}, //7
+            {1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1}, //8
+            {1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1}}; //9
 
     public double[][][] gaussWeights(int... layerSizes) {
 
@@ -57,7 +57,7 @@ public class NetworkTools {
     }
 
     public void deltaCalc(double[] output, double[] randomz) {
-
+        // do not use biases
         double result = 0;
         mean = new double[output.length];
 
@@ -71,26 +71,32 @@ public class NetworkTools {
             mean[i] = result;
         }
 
-
     }
 
-    public double[][][] updateWeights(double[][][] weights) {
+    public double[][][] updateWeights(double[][][] weights, int netSize, int[] netLayerSize ) {
 
-                                                    // layer neuron prevNeuron
-//        System.out.println("Lenghts:");
-//        System.out.println(weights.length);
-//        System.out.println(weights[1][1].length);
 
-        for (int layer = 1; layer < weights.length; layer++) {
-            for (int neuron = 0; neuron < weights[layer].length; neuron++) {
+        for (int layer = 1; layer < netSize; layer++) {
+            for (int neuron = 0; neuron < netLayerSize[layer]; neuron++) {
 
-                for (int prevNeuron = 0; prevNeuron < weights[layer][layer - 1].length; prevNeuron++) {
+                for (int prevNeuron = 0; prevNeuron < netLayerSize[layer - 1]; prevNeuron++) {
                     weights[layer][neuron][prevNeuron] += mean[neuron];
                 }
 
             }
 
         }
+
+//        for (int layer = 1; layer < weights.length; layer++) {
+//            for (int neuron = 0; neuron < weights[layer].length; neuron++) {
+//
+//                for (int prevNeuron = 0; prevNeuron < weights[layer][layer - 1].length; prevNeuron++) {
+//                    weights[layer][neuron][prevNeuron] += mean[neuron];
+//                }
+//
+//            }
+//
+//        }
 
         return weights;
 

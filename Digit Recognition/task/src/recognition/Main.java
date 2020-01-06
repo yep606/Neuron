@@ -19,24 +19,15 @@ public class Main {
 
 
         System.out.println("Learning...");
-//
-        int i = 0;
-        while(i < 10){
+
+        int index = 0;
+        while(index < 1000){
 
            double[] randomZ =  tools.idealValues[new Random().nextInt(10)];
            double[] outputs =  net.calculate(randomZ);
            tools.deltaCalc(outputs, randomZ);
-//            for (int layer = 1; layer < net.NETWORK_SIZE ; layer++) {
-//                for (int neuron = 0; neuron < net.NETWORK_LAYERS_SIZES[layer] ; neuron++) {
-//                    for (int prevNeuron = 0; prevNeuron < net.NETWORK_LAYERS_SIZES[layer -1 ] ; prevNeuron++) {
-//                        System.out.print(net.getWeights()[layer][neuron][prevNeuron] + " ");
-//                    }
-//                    System.out.println();
-//                    System.out.println();
-//                }
-//            }
-            net.setWeights(tools.updateWeights(net.getWeights()));
-            i++;
+            net.setWeights(tools.updateWeights(net.getWeights(), net.NETWORK_SIZE, net.NETWORK_LAYERS_SIZES));
+            index++;
 
         }
 
@@ -45,19 +36,22 @@ public class Main {
 
 
 
-//        int maxIndex = 0;
-//        double maxElem = net.calculate(inputs)[0];
-//        for (int i = 1; i < net.calculate(inputs).length; i++) {
-//            if (net.calculate(inputs)[i] > maxElem) {
-//                maxElem = net.calculate(inputs)[i];
-//                maxIndex = i;
-//            }
-//        }
-
         System.out.println("Input grid: ");
         inputs = takeInput();
-//
-//        System.out.println("This numbers is: " + maxIndex);
+
+        int maxIndex = 0;
+        double maxElem = net.calculate(inputs)[0];
+        for (int i = 1; i < net.calculate(inputs).length; i++) {
+            if (net.calculate(inputs)[i] > maxElem) {
+                maxElem = net.calculate(inputs)[i];
+                maxIndex = i;
+            }
+        }
+
+        System.out.println("This numbers is: " + maxIndex);
+        System.out.println("----");
+        System.out.println(Arrays.toString(net.calculate(inputs)));
+        System.out.println("----");
         System.out.println(Arrays.toString(net.calculate(inputs)));
 
     }
