@@ -4,11 +4,11 @@ import java.util.Random;
 
 public class NetworkTools {
 
-    private final double RATE_COEFF = 0.5;
-    double[] means;
-    double[][][] weights;
+    private final double RATE_COEFFICIENT = 0.5;
+    double[] mean;
+    Random random = new Random();
 
-    private int[][] idealValues = new int[][]{{1, 1, 1, 1, -1, 1, 1, -1, 1, 1, -1, 1, 1, 1, 1}, //0
+    public double[][] idealValues = new double[][]{{1, 1, 1, 1, -1, 1, 1, -1, 1, 1, -1, 1, 1, 1, 1}, //0
             {-1, 1, -1, -1, 1, -1, -1, 1, -1, -1, 1, -1, -1, 1, -1}, //1
             {1, 1, 1, -1, -1, 1, 1, 1, 1, 1, -1, -1, 1, 1, 1}, //2
             {1, 1, 1, -1, -1, 1, 1, 1, 1, -1, -1, 1, 1, 1, 1}, //3
@@ -19,49 +19,82 @@ public class NetworkTools {
             {1, 1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, 1, 1}, //8
             {1, 1, 1, 1, -1, 1, 1, 1, 1, -1, -1, 1, 1, 1, 1}}; //9
 
-    public double[][] gaussWeights() {
+    public double[][][] gaussWeights(int... layerSizes) {
 
-        Random random = new Random();
-        double[][] gaussNums = new double[10][15];
+        double[][][] gaussNums = new double[layerSizes.length][][];
 
-        for (int layer = 0; layer < 10; layer++) {
-            for (int neuron = 0; neuron < 15; neuron++) {
-                gaussNums[layer][neuron] = random.nextGaussian();
-            }
+        for (int i = 1; i < layerSizes.length; i++) {
+
+            gaussNums[i] = new double[layerSizes[i]][layerSizes[i - 1]];
+
         }
 
+        for (int layer = 1; layer < gaussNums.length; layer++) {
+            for (int neuron = 0; neuron < layerSizes[layer]; neuron++) {
+
+                for (int prevNeuron = 0; prevNeuron < layerSizes[layer - 1]; prevNeuron++) {
+
+                    gaussNums[layer][neuron][prevNeuron] = random.nextGaussian();
+
+                }
+            }
+        }
         return gaussNums;
     }
 
-    public double[][][] deltaCalculation(int length, int networkSize, int[] layerSizes, int[] inputs, double[] outputs) {
+    public double[][] gaussBias(int... biases) {
 
-        double result = 0.0;
-        weights = new double[length][][];
-        means = new double[10];
+        double[][] bias = new double[biases.length][biases[1]];
 
-        for (int layer = 1; layer < networkSize; layer++) {
-            for (int neuron = 0; neuron <layerSizes[layer]; neuron++) {
+        for (int i = 0; i < biases.length; i++) {
+            for (int j = 0; j < biases[i]; j++) {
+                bias[i][j] = random.nextGaussian();
+            }
+        }
 
-                for (int prevNeuron = 0; prevNeuron < layerSizes[layer - 1] ; prevNeuron++) {
+        return bias;
 
-                    weights[layer][neuron][prevNeuron] = RATE_COEFF * inputs[prevNeuron] * (idealValues[neuron][prevNeuron] - outputs[neuron]);
-                    means[neuron] += weights[layer][neuron][prevNeuron];
-                }
-                means[neuron] /= 10;
+    }
+
+    public void deltaCalc(double[] output, double[] randomz) {
+
+        double result = 0;
+        mean = new double[output.length];
+
+        for (int i = 0; i < output.length; i++) {
+            for (int j = 0; j < randomz.length; j++) {
+
+                result += RATE_COEFFICIENT * randomz[j] * (idealValues[i][j] - output[i]);
 
             }
+            result /= 10;
+            mean[i] = result;
+        }
+
+
+    }
+
+    public double[][][] updateWeights(double[][][] weights) {
+
+                                                    // layer neuron prevNeuron
+//        System.out.println("Lenghts:");
+//        System.out.println(weights.length);
+//        System.out.println(weights[1][1].length);
+
+        for (int layer = 1; layer < weights.length; layer++) {
+            for (int neuron = 0; neuron < weights[layer].length; neuron++) {
+
+                for (int prevNeuron = 0; prevNeuron < weights[layer][layer - 1].length; prevNeuron++) {
+                    weights[layer][neuron][prevNeuron] += mean[neuron];
+                }
+
+            }
+
         }
 
         return weights;
 
     }
-
-    public void updateWeights(){
-
-
-
-    }
-
 }
 
         // n * prevNeuron * (neuron(ideal) - neuron(current))
