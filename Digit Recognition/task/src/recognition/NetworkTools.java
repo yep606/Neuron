@@ -57,7 +57,6 @@ public class NetworkTools {
     }
 
     public void deltaCalc(double[] output, double[] randomz) {
-        // do not use biases
         double result = 0;
         mean = new double[output.length];
 
@@ -65,10 +64,10 @@ public class NetworkTools {
             for (int j = 0; j < randomz.length; j++) {
 
                 result += RATE_COEFFICIENT * randomz[j] * (idealValues[i][j] - output[i]);
-
             }
             result /= 10;
             mean[i] = result;
+//            System.out.println("-- mean: " + mean[i]);
         }
 
     }
@@ -86,17 +85,6 @@ public class NetworkTools {
             }
 
         }
-
-//        for (int layer = 1; layer < weights.length; layer++) {
-//            for (int neuron = 0; neuron < weights[layer].length; neuron++) {
-//
-//                for (int prevNeuron = 0; prevNeuron < weights[layer][layer - 1].length; prevNeuron++) {
-//                    weights[layer][neuron][prevNeuron] += mean[neuron];
-//                }
-//
-//            }
-//
-//        }
 
         return weights;
 

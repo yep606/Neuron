@@ -63,7 +63,7 @@ public class Network {
 
     }
 
-    private double sigmoid(double x) {
+    public double sigmoid(double x) {
 
         return 1d / (1 + Math.exp(-x));
 
