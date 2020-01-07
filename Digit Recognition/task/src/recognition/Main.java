@@ -19,33 +19,34 @@ public class Main {
         System.out.println("Learning...");
 
         int index = 0;
-        while(index < 50){
+        while(index < 10000){
 
            double[] randomZ =  tools.idealValues[0];//[new Random().nextInt(10)];
            double[] outputs =  net.calculate(randomZ);
-           tools.deltaCalc(outputs, randomZ);
+           tools.deltaCalc(outputs);
             net.setWeights(tools.updateWeights(net.getWeights(), net.NETWORK_SIZE, net.NETWORK_LAYERS_SIZES));
             index++;
 
         }
+        while(true) {
+            System.out.println("Input grid: ");
+            inputs = takeInput();
 
-        System.out.println("Input grid: ");
-        inputs = takeInput();
-
-        int maxIndex = 0;
-        double maxElem = net.calculate(inputs)[0];
-        for (int i = 1; i < net.calculate(inputs).length; i++) {
-            if (net.calculate(inputs)[i] > maxElem) {
-                maxElem = net.calculate(inputs)[i];
-                maxIndex = i;
+            int maxIndex = 0;
+            double maxElem = net.calculate(inputs)[0];
+            for (int i = 1; i < net.calculate(inputs).length; i++) {
+                if (net.calculate(inputs)[i] > maxElem) {
+                    maxElem = net.calculate(inputs)[i];
+                    maxIndex = i;
+                }
             }
+
+            System.out.println("This numbers is: " + maxIndex);
+            System.out.println("----");
+            System.out.println(Arrays.toString(net.calculate(inputs)));
+
+
         }
-
-        System.out.println("This numbers is: " + maxIndex);
-        System.out.println("----");
-        System.out.println(Arrays.toString(net.calculate(inputs)));
-
-
     }
 
     private static double[] takeInput() {
