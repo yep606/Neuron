@@ -5,7 +5,7 @@ import java.util.Random;
 public class NetworkTools {
 
     private final double RATE_COEFFICIENT = 0.5;
-    double[][] mean;
+    double[][][] mean;
     Random random = new Random();
 
     public double[][] idealValues = new double[][]{{1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1}, //0
@@ -56,22 +56,34 @@ public class NetworkTools {
 
     }
 
-    public void deltaCalc(double[] output) {
-        double result = 0;
-        mean = new double[output.length][15];
+    public void deltaCalc(double[] output, int input) {
+        double deltaW = 0;
+        mean = new double[output.length][15][10];
 
-        for (int out = 0; out < output.length; out++) { // 9
-            for (int grid = 0; grid < 15; grid++) { //15
-                for (int values = 0; values < 10; values++) { // 0..9
+        for (int out = 0; out < output.length; out++) {
+            for (int cell = 0; cell < idealValues[input].length; cell++) {
 
-                    result += RATE_COEFFICIENT * idealValues[values][grid] * (idealValues[out][grid] - output[out]);
+                deltaW += RATE_COEFFICIENT * idealValues[input][cell] * (idealValues[out][cell] - output[out]);
 
-                }
-
-                mean[out][grid] = result / 10;
+                mean[out][cell][input] += deltaW;
 
             }
         }
+
+
+
+//        for (int out = 0; out < output.length; out++) { // 9
+//            for (int grid = 0; grid < 15; grid++) { //15
+//                for (int values = 0; values < 10; values++) { // 0..9
+//
+//                    deltaW += RATE_COEFFICIENT * idealValues[values][grid] * (idealValues[out][grid] - output[out]);
+//
+//                }
+//
+//                mean[out][grid] = deltaW / 10;
+//
+//            }
+//        }
 
     }
 
@@ -82,7 +94,7 @@ public class NetworkTools {
 
                 for (int prevNeuron = 0; prevNeuron < netLayerSize[layer - 1] ; prevNeuron++) {
 
-                    weights[layer][netSize][prevNeuron] += mean[neuron][prevNeuron];
+                    weights[layer][netSize][prevNeuron] += (mean[neuron][prevNeuron][neuron] / 10);
 
                 }
 

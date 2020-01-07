@@ -19,11 +19,15 @@ public class Main {
         System.out.println("Learning...");
 
         int index = 0;
-        while(index < 10000){
+        while(index < 10){
 
-           double[] randomZ =  tools.idealValues[0];//[new Random().nextInt(10)];
-           double[] outputs =  net.calculate(randomZ);
-           tools.deltaCalc(outputs);
+           for(int input = 0; input < 10; input++){
+
+               double[] outputs =  net.calculate(tools.idealValues[input]);
+               tools.deltaCalc(outputs, input);
+
+           }
+
             net.setWeights(tools.updateWeights(net.getWeights(), net.NETWORK_SIZE, net.NETWORK_LAYERS_SIZES));
             index++;
 
