@@ -11,29 +11,13 @@ public class Main {
     public static void main(String[] args) {
 
         NetworkTools tools = new NetworkTools();
-
         Network net = new Network(15, 10);
-        net.setBias(tools.gaussBias(0, 10));
-        net.setWeights(tools.gaussWeights(15, 10));
+        Teacher teacher = new Teacher(net, tools);
+        teacher.learn(5);
 
-        System.out.println("Learning...");
 
-        int index = 0;
-        while(index < 3){
-           for(int input = 0; input < 10; input++){
-
-               double[] outputs =  net.calculate(tools.idealValues[input]);
-               tools.deltaCalc(outputs, input);
-
-           }
-            System.out.println(Arrays.toString(net.outputs[net.NETWORK_SIZE - 1]));
-            net.setWeights(tools.updateWeights(net.getWeights(), net.NETWORK_SIZE, net.NETWORK_LAYERS_SIZES));
-            index++;
-
-        }
-
-        while(true) {
-            System.out.println("Input grid: ");
+        while(true){
+            System.out.println("Input grid");
             inputs = takeInput();
 
             int maxIndex = 0;
@@ -45,10 +29,7 @@ public class Main {
                 }
             }
 
-            System.out.println("This numbers is: " + maxIndex);
-            System.out.println("----");
-            System.out.println(Arrays.toString(net.calculate(inputs)));
-
+            System.out.println("It's number " + maxIndex);
 
         }
     }
