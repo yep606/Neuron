@@ -1,9 +1,10 @@
 package recognition;
 
-import java.util.Arrays;
+import java.io.Serializable;
 
-public class Network {
+public class Network implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     double[][] outputs;
     double[][][] weights;
     double[][] bias;
