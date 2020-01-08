@@ -11,41 +11,27 @@ public class Main {
     public static void main(String[] args) {
 
         NetworkTools tools = new NetworkTools();
-
         Network net = new Network(15, 10);
-        net.setBias(tools.gaussBias(0, 10));
-        net.setWeights(tools.gaussWeights(15, 10));
+        Teacher teacher = new Teacher(net, tools);
+        teacher.learn(5);
 
-        System.out.println("Learning...");
 
-        int index = 0;
-        while(index < 50){
+        while(true){
+            System.out.println("Input grid");
+            inputs = takeInput();
 
-           double[] randomZ =  tools.idealValues[0];//[new Random().nextInt(10)];
-           double[] outputs =  net.calculate(randomZ);
-           tools.deltaCalc(outputs, randomZ);
-            net.setWeights(tools.updateWeights(net.getWeights(), net.NETWORK_SIZE, net.NETWORK_LAYERS_SIZES));
-            index++;
-
-        }
-
-        System.out.println("Input grid: ");
-        inputs = takeInput();
-
-        int maxIndex = 0;
-        double maxElem = net.calculate(inputs)[0];
-        for (int i = 1; i < net.calculate(inputs).length; i++) {
-            if (net.calculate(inputs)[i] > maxElem) {
-                maxElem = net.calculate(inputs)[i];
-                maxIndex = i;
+            int maxIndex = 0;
+            double maxElem = net.calculate(inputs)[0];
+            for (int i = 1; i < net.calculate(inputs).length; i++) {
+                if (net.calculate(inputs)[i] > maxElem) {
+                    maxElem = net.calculate(inputs)[i];
+                    maxIndex = i;
+                }
             }
+
+            System.out.println("It's number " + maxIndex);
+
         }
-
-        System.out.println("This numbers is: " + maxIndex);
-        System.out.println("----");
-        System.out.println(Arrays.toString(net.calculate(inputs)));
-
-
     }
 
     private static double[] takeInput() {
