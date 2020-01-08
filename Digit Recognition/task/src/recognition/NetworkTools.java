@@ -5,7 +5,7 @@ import java.util.Random;
 public class NetworkTools {
 
     private final double RATE_COEFFICIENT = 0.5;
-    double[] mean;
+    double[][] mean;
     Random random = new Random();
 
     public double[][] idealValues = new double[][]{{1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1}, //0
@@ -56,30 +56,33 @@ public class NetworkTools {
 
     }
 
-    public void deltaCalc(double[] output, double[] randomz) {
-        double result = 0;
-        mean = new double[output.length];
+    public void deltaCalc(double[] output, int input) {
 
-        for (int i = 0; i < output.length; i++) {
-            for (int j = 0; j < randomz.length; j++) {
+        double deltaW = 0;
+        mean = new double[output.length][15];
 
-                result += RATE_COEFFICIENT * randomz[j] * (idealValues[i][j] - output[i]);
+        for (int out = 0; out < output.length; out++) {
+            for (int cell = 0; cell < idealValues[input].length; cell++) {
+
+                deltaW += RATE_COEFFICIENT * idealValues[input][cell] * (idealValues[out][cell] - output[out]);
+                mean[out][cell] += deltaW;
+
+
             }
-            result /= 10;
-            mean[i] = result;
-//            System.out.println("-- mean: " + mean[i]);
+//            System.out.println(mean[0][0]);
         }
 
     }
 
     public double[][][] updateWeights(double[][][] weights, int netSize, int[] netLayerSize ) {
 
-
         for (int layer = 1; layer < netSize; layer++) {
             for (int neuron = 0; neuron < netLayerSize[layer]; neuron++) {
 
-                for (int prevNeuron = 0; prevNeuron < netLayerSize[layer - 1]; prevNeuron++) {
-                    weights[layer][neuron][prevNeuron] += mean[neuron];
+                for (int prevNeuron = 0; prevNeuron < netLayerSize[layer - 1] ; prevNeuron++) {
+
+                    weights[layer][netSize][prevNeuron] += (mean[neuron][prevNeuron] / 10);
+
                 }
 
             }
